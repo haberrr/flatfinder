@@ -77,7 +77,7 @@ class Nekretnine(FlatSourceBaseABC):
             })
             results.extend(self._parse_serp(response.text))
 
-        return results
+        return self.save_search(results)
 
     def get_one(self, flat_id, update=False):
         if update or not self.flat_collection.objects(flat_id=flat_id):
@@ -110,7 +110,7 @@ class Nekretnine(FlatSourceBaseABC):
             'lat': float(m.group(1)) if (m := re.search(r'ppLat = ([\d.]*)', response.text)) else None,
             'lon': float(m.group(1)) if (m := re.search(r'ppLng = ([\d.]*)', response.text)) else None,
             'rooms': safe_convert(details[1].text.strip().split(':')[1], float),
-            'size': safe_convert(details[0].text.strip().split(':')[1].split()[0], float),
+            'area': safe_convert(details[0].text.strip().split(':')[1].split()[0], float),
             'price': safe_convert(soup.find('h4', class_='stickyBox__price').text.split()[0], float),
             'district': ', '.join(
                 [item.text for item in soup.find('div', class_='property__location').find_all('li')[-2:]]

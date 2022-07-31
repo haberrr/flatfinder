@@ -46,7 +46,7 @@ class FlatABC(me.Document):
     lon = me.FloatField()
     views = me.IntField()
     rooms = me.FloatField()
-    size = me.FloatField()
+    area = me.FloatField()
     price = me.FloatField()
     district = me.StringField()
     advertiser = me.StringField()

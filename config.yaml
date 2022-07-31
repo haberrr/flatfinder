@@ -1,0 +1,9 @@
+mongodb:
+  host:
+  port:
+  db_name:
+  user:
+  password:
+telegram:
+  bot_token:
+  chat_ids: [<LIST OF CHAT IDs>]

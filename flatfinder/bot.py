@@ -2,11 +2,12 @@ import io
 import time
 import json
 import logging
+from typing import List
 from datetime import datetime
 
 import requests
 
-from flatfinder.db import db
+from flatfinder.db import db, FlatABC
 from flatfinder.settings import Settings
 
 BASE_URL = f'https://api.telegram.org/bot{Settings.TG_BOT_TOKEN}/{{}}'
@@ -14,7 +15,7 @@ GOOGLE_MAPS_URL = 'https://google.com/maps/search/?api=1&query={},{}'
 
 CAPTION_TEMPLATE = '''From <a href="{url}">{source}</a>
 <b>Price</b>: {price:.0f}
-<b>Area</b>: {size}
+<b>Area</b>: {area}
 <b>Rooms</b>: {rooms}
 <b>District</b>: {district} (📍 <a href="{google_maps}">Location</a>)
 <b>Views</b>: {views}
@@ -50,11 +51,11 @@ def send_request(endpoint, **kwargs):
     return response
 
 
-def prepare_media(flat):
+def prepare_media(flat: FlatABC):
     media = []
     files = {}
 
-    for i, image_src in enumerate(flat['image_list']):
+    for i, image_src in enumerate(flat.image_list):
         if len(media) >= 10:
             break
 
@@ -69,12 +70,12 @@ def prepare_media(flat):
     return media, files
 
 
-def notify(flats, source):
+def notify(flats: List[FlatABC], source):
     past_notifications = db['past_notifications']
 
     for flat in flats:
         for chat_id in Settings.TG_CHAT_IDS:
-            if past_notifications.find_one({'source': source, 'id': flat['id'], 'chat_id': chat_id}):
+            if past_notifications.find_one({'source': source, 'flat_id': flat.flat_id, 'chat_id': chat_id}):
                 continue
 
             media, files = prepare_media(flat)
@@ -84,8 +85,8 @@ def notify(flats, source):
             media[0].update({
                 'caption': CAPTION_TEMPLATE.format(
                     source=source.upper(),
-                    google_maps=GOOGLE_MAPS_URL.format(flat['lat'], flat['lon']),
-                    **{**CAPTION_DEFAULTS, **flat},
+                    google_maps=GOOGLE_MAPS_URL.format(flat.lat, flat.lon),
+                    **{**CAPTION_DEFAULTS, **flat.to_mongo()},
                 ),
                 'parse_mode': 'HTML',
             })
@@ -102,11 +103,11 @@ def notify(flats, source):
 
             if response.ok:
                 past_notifications.insert_one({
-                    'id': flat['id'],
+                    'flat_id': flat.flat_id,
                     'source': source,
                     'notification_ts': notification_ts,
                     'chat_id': chat_id,
                 })
-                logger.info('Notified about flat, ID: %s', flat['id'])
+                logger.info('Notified about flat, ID: %s', flat.flat_id)
             else:
-                logger.error('Failed to notify about flat, ID: %s', flat['id'])
+                logger.error('Failed to notify about flat, ID: %s', flat.flat_id)

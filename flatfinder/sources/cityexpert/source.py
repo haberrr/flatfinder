@@ -76,7 +76,7 @@ class CityExpert(FlatSourceBaseABC):
                 'lon': result['mapLng'],
                 'views': None,
                 'rooms': result['structure'],
-                'size': result['size'],
+                'area': result['size'],
                 'price': result['price'],
                 'district': result['municipality'],
             })

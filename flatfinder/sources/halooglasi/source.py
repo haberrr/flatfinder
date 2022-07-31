@@ -46,18 +46,15 @@ class HaloOglasi(FlatSourceBaseABC):
         flat_list = []
         for flat in soup.find('div', class_='row product-list').find_all('div', class_='product-item'):
             if 'banner-list' not in flat.get('class'):
-                info = {item.find('span').text: list(item.children)[0].contents[0] for item in
-                        flat.find(class_='product-features').find_all('li')}
-
                 flat_list.append({
-                    'id': flat.get('id'),
+                    'flat_id': flat.get('id'),
                     'url': self._endpoint(flat.find(class_='pi-img-wrapper').find('a').get('href')),
                 })
 
         return flat_list
 
     def search(self, filters=None, depth=None):
-        filters = HaloOglasiFilter.from_instance(filters)
+        filters = HaloOglasiFilter.from_instance(filters).to_dict()
         depth = depth or self.default_depth
 
         results = []
@@ -88,7 +85,7 @@ class HaloOglasi(FlatSourceBaseABC):
         if match := re.search('QuidditaEnvironment\.CurrentClassified=({.*?});', str(data)):
             result = json.loads(match.group(1))
             flat_data.update({
-                'id': flat_id,
+                'flat_id': flat_id,
                 'url': self._endpoint('nekretnine', 'izdavanje-stanova', 'beograd', flat_id),
                 'image_list': [urljoin(self.img_url, img) for img in result['ImageURLs']],
                 'title': result['Title'],
@@ -96,7 +93,7 @@ class HaloOglasi(FlatSourceBaseABC):
                 'lon': float(result['GeoLocationRPT'].split(',')[1]),
                 'views': result['TotalViews'],
                 'rooms': result['OtherFields']['broj_soba_s'],
-                'size': result['OtherFields']['kvadratura_d'],
+                'area': result['OtherFields']['kvadratura_d'],
                 'price': result['OtherFields']['cena_d'],
                 'district': '{}, {}'.format(result['OtherFields']['lokacija_s'],
                                             result['OtherFields']['mikrolokacija_s']),
