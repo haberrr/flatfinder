@@ -6,10 +6,10 @@ from datetime import datetime
 
 import requests
 
-from db import db
-from settings import BOT_TOKEN, CHAT_IDS
+from flatfinder.db import db
+from flatfinder.settings import Settings
 
-BASE_URL = f'https://api.telegram.org/bot{BOT_TOKEN}/{{}}'
+BASE_URL = f'https://api.telegram.org/bot{Settings.TG_BOT_TOKEN}/{{}}'
 GOOGLE_MAPS_URL = 'https://google.com/maps/search/?api=1&query={},{}'
 
 CAPTION_TEMPLATE = '''From <a href="{url}">{source}</a>
@@ -18,7 +18,13 @@ CAPTION_TEMPLATE = '''From <a href="{url}">{source}</a>
 <b>Rooms</b>: {rooms}
 <b>District</b>: {district} (📍 <a href="{google_maps}">Location</a>)
 <b>Views</b>: {views}
+<b>Agency</b>: {advertiser}
 '''
+
+CAPTION_DEFAULTS = {
+    'views': 'no info',
+    'advertiser': 'no info',
+}
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +40,8 @@ def send_request(endpoint, **kwargs):
             response = requests.post(BASE_URL.format(endpoint), **kwargs)
         elif response.status_code == 400:
             logger.warning('Bad request, retrying after 5s...')
-            time.sleep(5)
             retry_count -= 1
+            time.sleep(5)
             response = requests.post(BASE_URL.format(endpoint), **kwargs)
         else:
             logger.error('Error sending message: %s', response.text)
@@ -67,7 +73,7 @@ def notify(flats, source):
     past_notifications = db['past_notifications']
 
     for flat in flats:
-        for chat_id in CHAT_IDS:
+        for chat_id in Settings.TG_CHAT_IDS:
             if past_notifications.find_one({'source': source, 'id': flat['id'], 'chat_id': chat_id}):
                 continue
 
@@ -79,7 +85,7 @@ def notify(flats, source):
                 'caption': CAPTION_TEMPLATE.format(
                     source=source.upper(),
                     google_maps=GOOGLE_MAPS_URL.format(flat['lat'], flat['lon']),
-                    **flat,
+                    **{**CAPTION_DEFAULTS, **flat},
                 ),
                 'parse_mode': 'HTML',
             })
@@ -101,5 +107,6 @@ def notify(flats, source):
                     'notification_ts': notification_ts,
                     'chat_id': chat_id,
                 })
+                logger.info('Notified about flat, ID: %s', flat['id'])
             else:
                 logger.error('Failed to notify about flat, ID: %s', flat['id'])

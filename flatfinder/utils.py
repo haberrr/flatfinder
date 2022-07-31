@@ -7,10 +7,18 @@ from requests import HTTPError
 
 def retry(n: int = 3,
           delay: int = 5,
-          delay_increase: float = 2,
+          backoff_factor: float = 2,
           max_delay: int = 30,
           exceptions: Tuple[Type[Exception]] = (HTTPError,),
           ):
+    """Retry decorated function according to the specification.
+
+    :param n: number of times to retry decorated function.
+    :param delay: start delay between consecutive retries.
+    :param backoff_factor: multiply delay by this factor after each retry.
+    :param max_delay: maximum delay between retries.
+    :param exceptions: exceptions to retry, other exceptions won't be caught.
+    """
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -21,7 +29,7 @@ def retry(n: int = 3,
                     if i == n:
                         raise e
                     else:
-                        time.sleep(min(delay * delay_increase ** i, max_delay))
+                        time.sleep(min(delay * backoff_factor ** i, max_delay))
 
         return wrapper
 

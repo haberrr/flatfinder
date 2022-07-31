@@ -1,5 +1,7 @@
-venv
+.venv
 .idea
 
 .ipynb_checkpoints
 *.ipynb
+
+config.yaml
