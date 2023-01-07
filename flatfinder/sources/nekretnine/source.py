@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 from flatfinder.sources.base import FlatSourceBaseABC
 from flatfinder.db import FlatSearchResultABC, FlatABC
-from .filter import NekretnineFilter
+from flatfinder.sources.nekretnine.filter import NekretnineFilter
 
 
 class NekretnineFlatSearchResult(FlatSearchResultABC):

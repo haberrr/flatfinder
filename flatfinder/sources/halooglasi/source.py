@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 from flatfinder.sources.base import FlatSourceBaseABC
 from flatfinder.db import FlatSearchResultABC, FlatABC
-from .filter import HaloOglasiFilter
+from flatfinder.sources.halooglasi.filter import HaloOglasiFilter
 
 
 class HaloOglasiFlatSearchResult(FlatSearchResultABC):

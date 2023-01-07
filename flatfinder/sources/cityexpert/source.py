@@ -4,7 +4,7 @@ from typing import Optional
 from flatfinder.sources.base import FlatSourceBaseABC
 from flatfinder.db import FlatSearchResultABC, FlatABC
 from flatfinder.filters import SearchFilter
-from .filter import CityExpertFilter
+from flatfinder.sources.cityexpert.filter import CityExpertFilter
 
 
 class CityExpertFlatSearchResult(FlatSearchResultABC):
