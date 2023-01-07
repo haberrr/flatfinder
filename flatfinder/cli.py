@@ -33,7 +33,7 @@ def update_flats(source: FlatSourceBaseABC, filters: Dict[str, Any] = None) -> L
     return to_notify
 
 
-if __name__ == '__main__':
+def _main():
     parse = argparse.ArgumentParser()
     parse.add_argument('-n', '--notify', action='store_true')
     parse.add_argument('source', type=str)
@@ -48,3 +48,7 @@ if __name__ == '__main__':
     inserted_flats = update_flats(SOURCE_TYPES[args.source]())
     if inserted_flats and args.notify:
         notify(inserted_flats, args.source)
+
+
+if __name__ == '__main__':
+    _main()
