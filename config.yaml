@@ -1,7 +1,7 @@
 mongodb:
-  host:
-  port:
-  db_name:
+  host: localhost
+  port: 27017
+  db_name: flatfinder
   user:
   password:
 telegram:
