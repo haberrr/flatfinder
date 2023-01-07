@@ -6,4 +6,4 @@ mongodb:
   password:
 telegram:
   bot_token:
-  chat_ids: [<LIST OF CHAT IDs>]
+  chat_ids:

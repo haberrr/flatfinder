@@ -3,6 +3,8 @@ from typing import Tuple, Union, Any
 
 import yaml
 
+CONFIG_PATH = os.getenv('FLATFINDER_CONFIG', os.path.expanduser('~/.config/flatfinder/config.yaml'))
+
 
 class _YamlConfig:
     def __init__(self, config=None):
@@ -37,7 +39,7 @@ class _YamlConfig:
 
 
 class Settings:
-    _config = _YamlConfig.from_file('config.yaml')
+    _config = _YamlConfig.from_file(CONFIG_PATH)
 
     DB_HOST = os.environ.get('FLATFINDER_DB_HOST', _config['mongodb.host'])
     DB_PORT = os.environ.get('FLATFINDER_DB_PORT', _config['mongodb.port'])
