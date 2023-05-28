@@ -10,6 +10,7 @@ setup(
         'PyYAML~=6.0',
         'requests~=2.28.1',
         'beautifulsoup4~=4.11.1',
+        'dacite~=1.8.1',
     ],
     entry_points={
         'console_scripts': [

@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 
-from flatfinder.filters import SearchFilter, Furnished
+from flatfinder.sources.base.filter import SearchFilter, Furnished
 
 logger = logging.getLogger(__name__)
 

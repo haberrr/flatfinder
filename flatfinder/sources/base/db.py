@@ -15,7 +15,7 @@ mongo_client = me.connect(
 db = mongo_client[Settings.DB_DBNAME]
 
 
-class FlatSearchResultABC(me.Document):
+class FlatSearchResultBase(me.Document):
     meta = {
         'abstract': True,
         'indexes': [{
@@ -29,7 +29,7 @@ class FlatSearchResultABC(me.Document):
     updated_ts = me.FloatField(default=lambda: datetime.utcnow().timestamp())
 
 
-class FlatABC(me.Document):
+class FlatBase(me.Document):
     meta = {
         'abstract': True,
         'indexes': [{

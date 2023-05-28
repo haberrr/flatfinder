@@ -3,7 +3,7 @@ from typing import Dict, Any, List, Union, Type
 
 import requests
 
-from flatfinder.db import FlatSearchResultABC, FlatABC
+from flatfinder.sources.base.db import FlatSearchResultBase, FlatBase
 from flatfinder.utils import retry
 
 
@@ -15,21 +15,21 @@ class FlatSourceBaseABC(ABC):
 
     @property
     @abstractmethod
-    def search_collection(self) -> Type[FlatSearchResultABC]:
-        return FlatSearchResultABC
+    def search_collection(self) -> Type[FlatSearchResultBase]:
+        return FlatSearchResultBase
 
     @property
     @abstractmethod
-    def flat_collection(self) -> Type[FlatABC]:
+    def flat_collection(self) -> Type[FlatBase]:
         pass
 
     @abstractmethod
-    def search(self, filters: Dict[str, Any] = None, **kwargs) -> List[FlatSearchResultABC]:
+    def search(self, filters: Dict[str, Any] = None, **kwargs) -> List[FlatSearchResultBase]:
         """Search for the list of apartments that meet criteria listed in the `filters` argument."""
         pass
 
     @abstractmethod
-    def get_one(self, flat_id: Union[str, int], update: bool = False) -> FlatABC:
+    def get_one(self, flat_id: Union[str, int], update: bool = False) -> FlatBase:
         """Get apartment info by its ID.
 
         :param flat_id: ID of the flat in the source.
@@ -49,7 +49,7 @@ class FlatSourceBaseABC(ABC):
         """Construct the endpoint URL from `parts`."""
         return '/'.join(str(part).strip('/') for part in (self.url, *parts))
 
-    def save_search(self, search_items: List[Dict[str, Any]]) -> List[FlatSearchResultABC]:
+    def save_search(self, search_items: List[Dict[str, Any]]) -> List[FlatSearchResultBase]:
         """Save search results into DB and return list of saved objects."""
         flat_items = []
         for search_item in search_items:
@@ -63,7 +63,7 @@ class FlatSourceBaseABC(ABC):
 
         return flat_items
 
-    def save_flat(self, flat: Dict[str, Any]) -> FlatABC:
+    def save_flat(self, flat: Dict[str, Any]) -> FlatBase:
         """Save flat into DB."""
         return self.flat_collection.objects(flat_id=flat['flat_id']).modify(
             upsert=True,

@@ -1,17 +1,17 @@
 import json
 from typing import Optional
 
-from flatfinder.sources.base import FlatSourceBaseABC
-from flatfinder.db import FlatSearchResultABC, FlatABC
-from flatfinder.filters import SearchFilter
+from flatfinder.sources.base.source import FlatSourceBaseABC
+from flatfinder.sources.base.db import FlatSearchResultBase, FlatBase
+from flatfinder.sources.base.filter import SearchFilter
 from flatfinder.sources.cityexpert.filter import CityExpertFilter
 
 
-class CityExpertFlatSearchResult(FlatSearchResultABC):
+class CityExpertFlatSearchResult(FlatSearchResultBase):
     pass
 
 
-class CityExpertFlat(FlatABC):
+class CityExpertFlat(FlatBase):
     pass
 
 

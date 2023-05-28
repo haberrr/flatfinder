@@ -4,16 +4,16 @@ from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
-from flatfinder.sources.base import FlatSourceBaseABC
-from flatfinder.db import FlatSearchResultABC, FlatABC
+from flatfinder.sources.base.source import FlatSourceBaseABC
+from flatfinder.sources.base.db import FlatSearchResultBase, FlatBase
 from flatfinder.sources.halooglasi.filter import HaloOglasiFilter
 
 
-class HaloOglasiFlatSearchResult(FlatSearchResultABC):
+class HaloOglasiFlatSearchResult(FlatSearchResultBase):
     pass
 
 
-class HaloOglasiFlat(FlatABC):
+class HaloOglasiFlat(FlatBase):
     pass
 
 

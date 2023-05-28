@@ -2,16 +2,16 @@ import re
 
 from bs4 import BeautifulSoup
 
-from flatfinder.sources.base import FlatSourceBaseABC
-from flatfinder.db import FlatSearchResultABC, FlatABC
+from flatfinder.sources.base.source import FlatSourceBaseABC
+from flatfinder.sources.base.db import FlatSearchResultBase, FlatBase
 from flatfinder.sources.nekretnine.filter import NekretnineFilter
 
 
-class NekretnineFlatSearchResult(FlatSearchResultABC):
+class NekretnineFlatSearchResult(FlatSearchResultBase):
     pass
 
 
-class NekretnineFlat(FlatABC):
+class NekretnineFlat(FlatBase):
     pass
 
 
