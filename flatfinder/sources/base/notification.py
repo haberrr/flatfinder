@@ -7,7 +7,7 @@ import requests
 
 from flatfinder.sources.base.db import FlatBase
 
-GOOGLE_MAPS_URL = 'https://google.com/maps/search/?api=1&query={},{}'
+GOOGLE_MAPS_URL = 'https://google.com/maps/search/{},{}'
 
 
 class NotificationBaseABC(ABC):

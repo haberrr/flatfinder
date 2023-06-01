@@ -61,7 +61,7 @@ class ComingHome(FlatSourceBaseABC):
             data = self._request('get', flat_url).json().get('data')
             flat = self.save_flat({
                 'flat_id': str(data['cid']),
-                'url': flat_url,
+                'url': 'https://coming-home.com/en/living/{}'.format(data['cid']),
                 'title': data.get('title'),
                 'image_list': [self.image_url.format(img) for img in data.get('media', {}).get('images', [])],
                 'lat': data.get('latitudeObfuscated'),
