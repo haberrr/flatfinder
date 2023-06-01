@@ -6,7 +6,7 @@ from typing import Dict, Type, List, Any
 
 from flatfinder.sources import FlatSourceBaseABC, SearchFilter, FlatBase, NotificationBaseABC
 from flatfinder.sources import cityexpert, halooglasi, nekretnine, coming_home
-from flatfinder.bot import notify_many
+from flatfinder.telegram.bot import notify_many
 
 logging.basicConfig(
     format='%(asctime)s.%(msecs)03d' + time.strftime('%z') + ' - %(name)s - %(levelname)s: %(message)s',
